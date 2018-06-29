@@ -1,0 +1,169 @@
+// ¬ажно! ¬ам нужно изменить под себ€ следующие строки, начинающиес€ на set
+// set #userVarScriptMode - укажите 0, если запускаете первый раз, изменено окно игры или устройство
+// set #userVarPlanet - укажите номер планеты (1...5), на которой скрипт должен находитьс€
+// set #userVarHeroeLevel - укажите уровень вашего персонажа (1-13)
+// set #userVarNoBattle - укажите 1, если хотите быть на экране уровней планеты без бо€, иначе 0
+
+
+set #SAliensBotMode 0 // укажите 0, если запускаете первый раз
+
+// Scripts Settings
+set EmptyLineDelay 5
+set LineDelay 100
+
+// InterfaceAI - controller of game UI
+
+set workwindow FindWindow (Steam) // ќ 
+set #planet 3                     // указать планету дл€ атаки
+set #abilityTab 1                 // указать вкладку abilityAI
+set #gunnerTab 2                 // указать вкладку gunner_upgraded
+
+wait 3s // даем пользователю фору
+
+if 344, 243 3930602 abs and 883, 308 3405545 abs // стартовый экран
+    left 675, 424 abs
+else
+    set #error 1 // подсчЄт ошибок
+end_if
+
+call loadingScreen
+
+if 140, 133 2167571 abs and 1289, 436 2299412 abs // экран планет
+
+//экран планет
+// 483, 214 abs планета 1
+// 636, 486 abs планета 2
+// 780, 313 abs планета 3
+// 940, 526 abs планета 4
+// 1060, 203 abs планета 5
+set %planets[1 1] 480
+set %planets[1 2] 214
+set %planets[2 1] 636
+set %planets[2 2] 485
+set %planets[3 1] 780
+set %planets[3 2] 310
+set %planets[4 1] 940
+set %planets[4 2] 525
+set %planets[5 1] 1060
+set %planets[5 2] 200
+
+    kleft %planets[#planet 1] %planets[#planet 2] abs // жмем на нужной планете
+else
+    set #error #error + 1
+end_if
+
+call loadingScreen
+
+if 245, 153 2167572 abs and 1262, 204 985352 abs//экран выбора уровн€
+    get color #colorLevels 1248 270 abs
+    set #startX 1215
+    set #startY 550
+    for #y 510 110 -65
+        for #x 1215 480 -65
+            kleft #x, #y abs
+            wait 1500 // пауза, чтобы не было нажайти по экрану сражени€
+            if 984, 326 3684665 abs // зона уже захвачена
+                left 1027, 431 abs
+                wait 400
+                if 984, 326 3684665 abs // зона по-прежнему захвачена
+                    left 1153, 433 abs
+                    wait 400
+                end_if
+                move 1260, 500 abs // перемещаем, чтобы не было перекрыти€ уровн€ группами при наведении
+            end_if
+            if_not 1248 270 #colorLevels abs
+                break
+            end_if
+        end_for
+        if_not 1248 270 #colorLevels abs
+            break
+        end_if
+    end_for
+else
+    set #error #error + 1
+end_if
+        
+call loadingScreen
+wait 2s // ждем, пока установ€тс€ турели
+
+if 107, 310 6315613 abs and 141, 591 11644589 abs // экран сражени€
+    call battlefield #abilityTab #gunnerTab
+    set #error 0
+else
+    if #error = 3
+        while_not 107, 310 6315613 abs and 141, 591 11644589 abs
+            wait 500
+        end_while
+        call battlefield #abilityTab #gunnerTab
+        set #error 0
+    end_if
+end_if
+
+// ждем, пока идЄт загрузка (черный экран)
+proc loadingScreen
+    while 200, 336 0 abs and 1100 330 0 abs
+        wait 1s
+    end_while
+end_proc
+
+proc battlefield #abilityTab #gunnerTab
+    start_script #abilityTab // запуск abilityAI
+    start_script #gunnerTab wait // запуск gunner_upgraded
+
+    while_not 770, 410 16645629 abs // ждем кнопку "ѕродолжить"
+        wait 500
+    end_while
+    left 680, 420 abs
+    if 616, 339 3421494 abs
+        left 893, 426 abs
+    end_if // здесь нужно условие, что нужно перезагрузить игру
+    end_if
+end_proc
+
+
+// ћне это не нужно
+// set MouseClickDelay 10 // задержка между кликами
+// set timer
+
+//while timer < 90000
+    //set findoffsetx -45
+    //set #enemyStatus FindColor (339 254 1311 664 2 2 (14454055) %enemy 2 1 1% abs) // находим противника
+    //set %enemyX[2] %enemy[1 1] - 25
+    //set %enemyX[3] %enemy[1 1] - 35
+    //set %enemyX[4] %enemy[1 1] - 45
+    //set %enemyX[5] %enemy[1 1] - 55
+
+    //if #enemyStatus > 0
+    //    repeat 10
+    //        kleft %enemy[1 1] %enemy[1 2] abs
+    //        set %enemy[1 1] %enemy[1 1] - 5
+    //    end_repeat
+    //end_if
+
+        // стрел€ем по противнику, сделано так, чтобы экономить врем€
+        //kleft %enemy[1 1], %enemy[1 2] abs
+        //kleft %enemyX[2], %enemy[1 2] abs
+        //kleft %enemyX[3], %enemy[1 2] abs
+        //kleft %enemyX[4], %enemy[1 2] abs
+        //kleft %enemyX[5], %enemy[1 2] abs
+        //set %enemy[1 1] %enemy[1 1] - 10 // учитываем скорость противника
+
+
+    //get mouse_pos #x #y
+    //kleft #x #y
+    //set #session #session + 1
+    //if #session > 360
+    //    set #session 999
+    //end_if
+//end_while
+
+//proc aim
+ //266, 176 abs
+ //1312, 629 abs
+ //14454055 цвет противника
+    //FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 10% abs)
+//end_proc
+
+//proc fire %enemy
+    //kleft %enemy[1 1] %enemy[2 1]
+//end_proc

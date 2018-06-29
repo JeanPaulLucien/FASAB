@@ -1,0 +1,114 @@
+// Управление интерфейсом игры
+
+wait 3s
+set #planet 3 // указать планету для атаки
+
+if 369, 225 3865066 abs and 853, 251 3602410  abs // стартовый экран
+    kleft 675, 424 abs
+end_if
+call loadingScreen
+
+if 140, 133 2167571 abs and 1289, 436 2299412 abs // экран планет
+
+//экран планет
+// 483, 214 abs планета 1
+// 636, 486 abs планета 2
+// 780, 313 abs планета 3
+// 940, 526 abs планета 4
+// 1060, 203 abs планета 5
+set %planets[1 1] 480
+set %planets[1 2] 214
+set %planets[2 1] 636
+set %planets[2 2] 485
+set %planets[3 1] 780
+set %planets[3 2] 310
+set %planets[4 1] 940
+set %planets[4 2] 525
+set %planets[5 1] 1060
+set %planets[5 2] 200
+
+    kleft %planets[#planet 1] %planets[#planet 2] abs // жме на нужной планете
+end_if
+call loadingScreen
+
+if 427, 211 722438 abs and 1235, 599 788487 abs//экран выбора уровня
+    get color #colorLevels 1080 275 abs
+    set #startX 1215
+    set #startY 550
+    for #y 550 110 -65
+        for #x 1215 480 -65
+            kleft #x, #y abs
+            if_not 1080 275 #colorLevels abs
+                break
+            end_if
+        end_for
+    end_for
+end_if
+        
+call loadingScreen
+stop_script
+
+
+// ждем, пока идёт загрузка (черный экран)
+proc loadingScreen
+    while 200, 336 0 abs and 1100 330 0 abs
+        wait 1s
+    end_while
+end_proc
+
+
+proc dummykfdj
+
+set MouseClickDelay 10 // задержка между кликами
+set timer
+wait 3s
+
+while timer < 90000
+
+    // находим противника
+    set findoffsetx -45
+    set #enemyStatus FindColor (339 254 1311 664 2 2 (14454055) %enemy 2 1 1% abs)
+    //set %enemyX[2] %enemy[1 1] - 25
+    //set %enemyX[3] %enemy[1 1] - 35
+   // set %enemyX[4] %enemy[1 1] - 45
+    //set %enemyX[5] %enemy[1 1] - 55
+
+    if #enemyStatus > 0
+        repeat 10
+            kleft %enemy[1 1] %enemy[1 2] abs
+            set %enemy[1 1] %enemy[1 1] - 5
+        end_repeat
+    end_if
+
+        // стреляем по противнику, сделано так, чтобы экономить время
+        //kleft %enemy[1 1], %enemy[1 2] abs
+        //kleft %enemyX[2], %enemy[1 2] abs
+        //kleft %enemyX[3], %enemy[1 2] abs
+        //kleft %enemyX[4], %enemy[1 2] abs
+        //kleft %enemyX[5], %enemy[1 2] abs
+        //set %enemy[1 1] %enemy[1 1] - 10 // учитываем скорость противника
+
+
+    //get mouse_pos #x #y
+    //kleft #x #y
+    //set #session #session + 1
+    //if #session > 360
+    //    set #session 999
+    //end_if
+end_while
+stop_script
+
+
+proc aim
+ //266, 176 abs
+ //1312, 629 abs
+ //14454055 цвет противника
+    FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 10% abs)
+
+end_proc
+
+proc fire %enemy
+    kleft %enemy[1 1] %enemy[2 1]
+end_proc
+
+end_proc

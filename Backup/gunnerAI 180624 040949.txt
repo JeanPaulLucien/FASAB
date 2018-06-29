@@ -1,0 +1,49 @@
+set MouseClickDelay 10 // задержка между кликами
+set timer
+wait 3s
+
+while timer < 90000
+
+    // находим противника
+    set findoffsetx -65
+    set #enemyStatus FindColor (339 254 1311 664 2 2 (14454055) %enemy 2 1 1% abs)
+    //set %enemyX[2] %enemy[1 1] - 25
+    //set %enemyX[3] %enemy[1 1] - 35
+   // set %enemyX[4] %enemy[1 1] - 45
+    //set %enemyX[5] %enemy[1 1] - 55
+    
+    repeat 10
+        kleft %enemy[1 1] %enemy[1 2] abs
+        set %enemy[1 1] %enemy[1 1] - 15
+    end_repeat
+
+        // стреляем по противнику, сделано так, чтобы экономить время
+        //kleft %enemy[1 1], %enemy[1 2] abs
+        //kleft %enemyX[2], %enemy[1 2] abs
+        //kleft %enemyX[3], %enemy[1 2] abs
+        //kleft %enemyX[4], %enemy[1 2] abs
+        //kleft %enemyX[5], %enemy[1 2] abs
+        //set %enemy[1 1] %enemy[1 1] - 10 // учитываем скорость противника
+
+    
+    //get mouse_pos #x #y
+    //kleft #x #y
+    //set #session #session + 1
+    //if #session > 360
+    //    set #session 999
+    //end_if
+end_while
+stop_script
+
+
+proc aim
+ //266, 176 abs
+ //1312, 629 abs
+ //14454055 цвет противника
+    FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 10% abs)
+
+end_proc
+
+proc fire %enemy
+    kleft %enemy[1 1] %enemy[2 1]
+end_proc

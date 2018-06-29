@@ -1,0 +1,83 @@
+// Fully Armored SAliens Bot v1.0
+// Author: https://steamcommunity.com/id/ipauli
+
+
+// ¬ажно! ¬ам нужно изменить под себ€ следующие строки, начинающиес€ на set
+// set #userVarScriptMode - укажите 1, если запускаете первый раз, изменено окно игры или устройство
+// set #userVarPlanet - укажите номер планеты (1...5), на которой скрипт должен находитьс€
+// set #userVarHeroeLevel - укажите уровень вашего персонажа (1...13)
+// set #userVarNoBattle - укажите 1, если хотите быть на экране уровней планеты без бо€, иначе 0
+
+// Scripts Settings. Don't touch it!
+set EmptyLineDelay 5
+set LineDelay 100
+
+call inputUserVar 1 %hint[1]
+set #userVarScriptMode $inputUserVar
+call inputUserVar 2 %hint[2]
+set #userVarPlanet $inputUserVar
+call inputUserVar 3 %hint[3]
+set #userVarHeroeLevel $inputUserVar
+call inputUserVar 4 %hint[4]
+set #userVarNoBattle $inputUserVar
+
+proc inputUserVar #varNum $varHint
+    :retryInputUserVar
+    if #varNum = 1
+        set #result Prompt(!"Select the mode:" "1 - learning" "2 - standart")
+    else if #varNum = 2
+            set #result Prompt(!"Select the planet:" 1 2 3 4 5) // 1-5
+        else if #varNum = 3
+                set #result Prompt(!"Enter your heroe level (1...13):" 1 2 3 4 5 6 7 8 9) // 1-13
+            else if #varNum = 4
+                set #result Prompt(!"Do you wish just to be on the planet?" "Yes" "No, I wish battle") // 1 или 2
+            end_if
+        end_if
+    end_if
+    if #result = 0
+        goto retryInputUserVar
+    end_if
+    set $result #result
+end_proc
+        
+goto mark
+
+// ѕроверка пользовательских переменных
+set $checkReport ''
+if #userVarScriptMode = 0
+    set $checkReport Mode was not selected. Please, select a mode: 1 - learning, 2 - standart.\n
+end_if
+if #userVarPlanet < 1 or #userVarPlanet > 5
+    set $checkReport $checkReport Planet was not selected. Select a planet: 1...5.\n
+end_if
+if #userVarHeroeLevel < 1 or #userVarHeroeLevel > 13
+    set $checkReport $checkReport Heroe level was not entered. Enter heroe level: 1...13.
+end_if
+if $checkReport != ''
+    msg $checkReport
+    end_script
+end_if
+
+:mark
+set workwindow 0
+if workWindow = 0
+    msg –азверните окно с игрой на весь экран и нажмите "ќ ", чтобы продолжить.
+    wait 1000
+    set WorkWindow WindowFromCursor
+end_if
+
+// не работает, как хотело бы :(
+proc checkUserVar #userVar $varType // проверить переменные от пользовател€: переменна€, еЄ значение
+    if #userVar = 0
+        set $result $varType
+    else
+        set $result :continueScript
+    end_if
+end_proc
+
+end_script
+
+:checkUserVar
+if #
+
+    

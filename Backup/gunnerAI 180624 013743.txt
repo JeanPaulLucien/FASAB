@@ -1,0 +1,46 @@
+set #sessionA 0
+set SendExDelay 10
+set MouseClickDelay 10 // задержка между кликами
+wait 5s
+set timer
+while timer < 90000
+
+    // находим противника
+    set $enemyStatus FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 10% abs)
+    set #shotCounter 0 // считаем выстрелы
+    while $enemyStatus > 0
+
+        // стреляем по противнику
+        repeat 5
+            kleft %enemy[1 1], %enemy[1 2] abs
+            set %enemy[1 1] %enemy[1 1] - 10 // учитываем скорость противника
+        end_repeat
+        //set #shotCounter #shotCounter + 1
+        //if #shotCounter > 5
+            if_not %enemy[1 1], %enemy[1 2] 14454055 abs
+                set #enemyStatus 0
+            end_if
+        //end_if
+    end_while
+    
+    //get mouse_pos #x #y
+    //kleft #x #y
+    //set #session #session + 1
+    //if #session > 360
+    //    set #session 999
+    //end_if
+end_while
+stop_script
+
+
+proc aim
+ //266, 176 abs
+ //1312, 629 abs
+ //14454055 цвет противника
+    FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 10% abs)
+
+end_proc
+
+proc fire %enemy
+    kleft %enemy[1 1] %enemy[2 1]
+end_proc

@@ -1,0 +1,60 @@
+// Использование умения 2
+set %recharge[2] 24000
+
+set SendExDelay 10
+
+set timer1 // способность 2, 24s
+set timer2 // способность 3, 6s
+
+// нужны, чтобы активировать способности в начале уровня для запуска отката
+set %enable[2] 1
+
+get color #battleFinished 700 130 abs // получаем цвет, чтобы понять, что битва завершена
+while 105, 308 6315613 abs and 141, 591 11644589 abs and 700 130 #battleFinished abs or 426, 147 16777215 abs// пока мы в сражении или турель сломана
+
+
+        if timer1 > %recharge[2] or %enable[2] = 1
+            // 2 не бьет в молоко
+            set #enemyStatusB FindColor (339 254 1311 664 2 2 (14454055, 13404480) %enemy 2 1 1% abs
+            if #enemyStatusB > 0
+                sendex 2
+                set timer1 0
+                if %enable[2] = 1
+                    set %enable[2] 0
+                end_if
+                set #enemyStatusB 0
+            end_if
+        end_if
+    end_if
+
+    if #heroeLevel > 4
+        if timer2 > %recharge[3] or %enable[3] = 1
+            set #enemyStatusB FindColor (339 254 1311 664 2 2 (14454055, 13404480) %enemy 2 1 1% abs
+            if #enemyStatusB > 0
+                sendex 3
+                set timer2 0
+                if %enable[3] = 1
+                    set %enable[3] 0
+                end_if
+                set #enemyStatusB 0
+            end_if
+        end_if
+    end_if
+
+    while timer3 < %recharge[11]
+        move mouseposabs_x - 20, mouseposabs_y - 20 // смещение прицела
+        sendex 1
+        wait 100 // ждем перезарядку 1
+    end_while
+
+    set #enemyStatusC FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 abs)
+    if_not #enemyStatusC > 0
+        move 1235, 405 abs
+    end_if
+
+
+
+    set timer3 0
+
+end_while
+stop_script

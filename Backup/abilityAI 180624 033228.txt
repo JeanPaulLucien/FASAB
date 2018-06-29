@@ -1,0 +1,71 @@
+// Указать уровень персонажа
+set #heroeLevel 5 // 1 - 0, 2 - 3, 3 - 5, 4 - 7, 5 - 9
+
+// Время перезарядки умений
+set %recharge[1]   500
+set %recharge[2] 24000
+set %recharge[3]  6000
+
+if #heroeLevel > 2
+    set %recharge[0] %recharge[2]
+    if #heroeLevel > 4
+        set %recharge[0] %recharge[3]
+        if #heroeLevel > 6
+
+        end_if
+    end_if
+end_if
+
+set SendExDelay 10
+
+wait 3s
+
+while 1279, 647 3472358 abs and 1262, 294 1051145 abs // пока мы на экране выбора уровня
+    wait 3s
+end_while
+wait 10s
+
+set timer1 // способность 2, 24s
+set timer2 // способность 3, 6s
+set timer3
+
+// нужны, чтобы активировать способности в начале уровня для запуска отката
+set %enable[2] 1
+set %enable[3] 1
+
+while 56, 204 8748408 abs and 61, 573 10921123 abs // пока мы в сражении
+
+    if #charLevel > 2 // проверяем, что умение доступно для использования
+        if timer1 > %recharge[2] or %enable[2] = 1
+            // 2 не бьет в молоко
+            set #enemyStatusB FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 abs)
+            if #enemyStatusB > 0
+                sendex 2
+                set timer1 0
+                if %enable[2] = 1
+                    set %enable[2] 0
+                end_if
+            end_if
+        end_if
+    end_if
+    
+    if #charLevel > 4
+        if timer2 > %recharge[3] or %enable[3] = 1
+            sendex 3
+            set timer2 0
+            if %enable[3] = 1
+                set %enable[3] 0
+            end_if
+        end_if
+    end_if
+    
+    while timer3 < %recharge[0]
+        sendex 1
+
+        if_not FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 abs)
+            move 1235, 405 abs
+        end_if
+        wait 300 // ждем перезарядку 1
+    end_while
+end_while
+stop_script

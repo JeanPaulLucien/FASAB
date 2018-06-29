@@ -1,0 +1,30 @@
+set SendExDelay 10
+wait 5s
+while 1279, 647 3472358 abs and 1262, 294 1051145 abs // пока мы на экране выбора уровня
+    wait 3s
+end_while
+wait 10s
+//set timer3 // длительность игры, 90s
+// timer2 - способность 2, 25s
+// timer1 - способность 1, 0.5s
+set #rechargeTwo -1
+while 105, 319 6315613 abs and 54, 575 10789537 abs // пока мы в сражении
+    if timer2 > #rechargeTwo
+        // 2 не бьет в молоко
+        set #enemyStatusB FindColor (266 176 1312 629 2 2 (14454055) %enemy 2 1 abs)
+        if #enemyStatusB > 0
+            sendex 2
+            set timer2 0
+            if #rechargeTwo = 0
+                set #rechargeTwo 25000
+            end_if
+        end_if
+    end_if
+    while timer2 < 25000
+        if timer1 > 500
+            sendex 1
+            set timer1 0
+        end_if
+    end_while
+end_while
+stop_script

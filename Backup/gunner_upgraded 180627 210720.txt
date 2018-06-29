@@ -1,0 +1,55 @@
+// просто стреляет по противникам
+
+wait 2s
+
+set MouseClickDelay 5
+
+get color #battleFinished 700 130 abs // получаем цвет, чтобы понять, что битва завершена
+while 109, 310 6315613 abs and 182, 590 11644589 abs and 700 130 #battleFinished abs // экран боя
+    set findoffsetx -15
+    set #enemyStatus FindColor (339 254 1311 664 2 2 (14454055, 13404480) %enemy 2 1 1% abs
+    if #enemyStatus > 0
+        double_left %enemy[1 1] %enemy[1 2] abs workwindow.0
+        double_left %enemy[1 1] %enemy[1 2] abs workwindow.0
+        double_left %enemy[1 1] %enemy[1 2] abs workwindow.0
+        double_left %enemy[1 1] %enemy[1 2] abs workwindow.0
+    end_if
+    
+    if 426, 150 16777215 abs// турель сломана
+        while 426, 150 16777215 abs
+            // продолжаем целиться
+            set findoffsetx -30
+            set #enemyStatus FindColor (339 254 1311 664 2 2 (14454055, 13404480) %enemy 2 1 1% abs
+            if #enemyStatus > 0
+                move %enemy[1 1] %enemy[1 2] abs
+            end_if
+        end_while
+    end_if
+    
+    //if #enemyStatus > 0
+    //    repeat 10
+    //        //kleft %enemy[1 1] %enemy[1 2] abs
+    //        double_left %enemy[1 1] %enemy[1 2] abs
+    //        set %enemy[1 1] %enemy[1 1] - 5
+    //    end_repeat
+    //end_i
+    //double_left mouseposabs_x mouseposabs_y
+    //double_left mouseposabs_x mouseposabs_y
+    //double_left mouseposabs_x mouseposabs_y
+end_while
+
+proc shooter // не нужно долбить по ЛКМ
+
+while 105, 308 6315613  abs and 141, 591 11644589 abs // экран боя
+    double_left mouseposabs_x mouseposabs_y
+    double_left mouseposabs_x mouseposabs_y
+    double_left mouseposabs_x mouseposabs_y
+end_while
+
+end_proc
+
+stop_script
+
+// 426, 149 16777215 abs станция сломана
+
+//
